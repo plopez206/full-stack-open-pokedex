@@ -15,6 +15,6 @@ app.get('/health', (req, res) => {
   res.send('ok')
 })
 
-app.get('/stay', (req, res) => {
-  res.send('STAY HARD')
+app.get('/who', (req, res) => {
+  res.send('WHOS GONNA CARRY THE BOATS??')
 })
