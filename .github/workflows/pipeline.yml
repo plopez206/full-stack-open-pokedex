@@ -45,11 +45,35 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' }}
     steps:
-      - uses: actions/checkout@v4  # <-- ¡Necesario!
-      
+      - uses: actions/checkout@v4
+
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.64.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
 
+  notify:
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Notify Success
+        if: ${{ success() }}
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          details: "✅ Deployment succeeded for commit ${{ github.sha }} by ${{ github.actor }}."
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Notify Failure
+        if: ${{ failure() }}
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: error
+          details: |
+            ❌ Deployment failed!
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+            Message: ${{ github.event.head_commit.message }}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
