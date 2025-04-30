@@ -64,7 +64,7 @@ jobs:
         with:
           severity: info
           details: "✅ Deployment succeeded for commit ${{ github.sha }} by ${{ github.actor }}."
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       - name: Notify Failure
         if: ${{ failure() }}
@@ -76,4 +76,4 @@ jobs:
             Commit: ${{ github.sha }}
             Author: ${{ github.actor }}
             Message: ${{ github.event.head_commit.message }}
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
